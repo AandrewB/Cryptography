@@ -1,0 +1,127 @@
+def key_matrix_generator(keyword):
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    matrix_letters = []
+
+    for char in keyword:
+        if char in alphabet:
+            alphabet = alphabet.replace(char, '')
+
+    for char in keyword:
+        if char not in matrix_letters:
+            matrix_letters.append(char)     
+    
+    for char in alphabet:
+        if char not in matrix_letters:
+            matrix_letters.append(char)
+
+    key_matrix = [matrix_letters[i:i+5] for i in range(0, 25, 5)]  
+    return key_matrix
+
+def preprocessing(plaintext):
+   plaintext = plaintext.replace('j', 'i')
+   diapraph= []
+   i = 0
+   while i < len(plaintext):
+    if i + 1 < len(plaintext):
+
+        if plaintext[i] == plaintext[i+1]:
+            twin = [plaintext[i], 'x']
+            diapraph.append(twin)
+            i = i + 1
+        else:
+            twin = [plaintext[i], plaintext[i+1]]
+            diapraph.append(twin)
+            i = i + 2
+
+    else:
+        twin = [plaintext[i], 'x']
+        diapraph.append(twin)
+        i = i + 1
+
+   return diapraph
+
+def encryption(key_matrix, diapraph):
+    encrypted_text = []
+    for pair in diapraph:
+        a = pair[0]
+        b = pair[1]
+        for row_index, row in enumerate(key_matrix):
+            for col_index, letter in enumerate(row):
+                if letter == a:
+                    row_a = row_index
+                    col_a = col_index
+                if letter == b: 
+                    row_b = row_index
+                    col_b = col_index
+        if col_a == col_b:
+            row_a = (row_a + 1) % 5
+            row_b = (row_b + 1) % 5
+
+        if row_a == row_b:
+           col_a = (col_a + 1) % 5
+           col_b= (col_b + 1) % 5
+        
+        else:
+            a = key_matrix[row_a][col_b]
+            b = key_matrix[row_b][col_a]
+    
+        encrypted_text.append(a)
+        encrypted_text.append(b)
+
+    return ''.join(encrypted_text)
+
+def decryption(key_matrix, encrypted_text):
+        encrypted_pairs = []
+        decrypted_text = []
+        for i in range(0, len(encrypted_text), 2):
+            a = encrypted_text[i]
+            b = encrypted_text[i+1]
+            pair = [a,b]
+
+            encrypted_pairs.append(pair)
+
+        for pair in encrypted_pairs:
+                a = pair[0]
+                b = pair[1]
+
+                for row_index, row in enumerate(key_matrix):
+                    for col_index, letter in enumerate(row):
+                        if letter == a:
+                            row_a = row_index
+                            col_a = col_index
+
+                        if letter == b:
+                            row_b = row_index
+                            col_b = col_index
+
+                if col_a == col_b:
+                    row_a = (row_a - 1) % 5
+                    row_b = (row_b - 1) % 5
+            
+                if row_a == row_b:
+                    col_a = (col_a - 1) % 5
+                    col_b = (col_b - 1) % 5
+            
+                else: 
+                    a = key_matrix[row_a][col_b]
+                    b = key_matrix[row_b][col_a]
+
+                    decrypted_text.append(a)
+                    decrypted_text.append(b)
+
+        return ''.join(decrypted_text)
+
+key = key_matrix_generator('hotdog')
+print("Key Matrix:")
+for row in key:
+    print(row)
+
+diagraph = preprocessing('andrewburgos')
+print("Preprocessed Diagraph:")
+for pair in diagraph:
+    print(pair)
+
+print(encryption(key, diagraph))
+
+encrypted = encryption(key,diagraph)
+print(decryption(key, encrypted))
