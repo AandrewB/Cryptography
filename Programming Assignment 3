@@ -1,0 +1,54 @@
+def feistel_ecrypt_string(input, key):
+   def string_char_converter(text):
+         character = list(text)
+         return character
+   
+   def char_ASCII_converter(character):
+      array_list = []
+      for letter in character:
+            array_list.append(ord(letter))
+      return array_list
+
+   def ASCII_Binary_converter(binary):
+      array_List = []
+      for number in binary:
+            binary_string = bin(number)[2:]
+            binary_string = binary_string.zfill(8)
+            array_List.append((binary_string))
+      return array_List
+
+   def split(binary, key):  
+      L = binary[0:4]
+      R = binary[4:8]
+      L_int = int(L,2)
+      F_output = F(R,key)
+      F_int = int(F_output,2)
+      LF_XOR = L_int ^ F_int
+      Binary_XOR = bin(LF_XOR)
+      sliced = Binary_XOR[2:]
+      R1 = sliced.zfill(4)
+      L1 = R
+      result = L1 + R1
+      return result
+
+   def F(R, key):
+      R_int = int(R,2)
+      key_int = int(key,2)
+      XOR = R_int ^ key_int
+      binary_XOR = bin(XOR)
+      sliced = binary_XOR[2:]
+      result = sliced.zfill(4)
+      return result
+   
+
+   char = string_char_converter(input)
+   ASCII = char_ASCII_converter(char)
+   binary = ASCII_Binary_converter(ASCII)
+   encrypted_block = []
+   for b in binary:
+      result = split(b, key)
+      encrypted_block.append(result)
+   return encrypted_block
+
+result = feistel_ecrypt_string('AndrewBurgos', '1101')
+print(result)
