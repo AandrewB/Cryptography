@@ -1,0 +1,45 @@
+def string_char_converter(text, mode):
+    if mode == 'to_list':
+        return list(text)
+
+        
+    elif mode == 'to_string':
+        return ''.join(text)
+            
+print(string_char_converter('Andrew Burgos','to_list')) 
+print(string_char_converter(['A','n','d','r','e','w',' ','B','u', 'r', 'g', 'o', 's'],'to_string'))
+
+
+def char_ASCII_converter(char, mode):
+    if mode == 'to_ASCII':
+        array_list = []
+        for letter in char:
+            array_list.append(ord(letter))
+        return array_list
+        
+    elif mode == 'to_char':
+        list_of_ASCII = []
+        for number in char:
+            list_of_ASCII.append(chr(number))
+        return list_of_ASCII
+    
+print(char_ASCII_converter(['A','n','d','r','e','w',' ','B','u', 'r', 'g', 'o', 's'], 'to_ASCII'))  
+print(char_ASCII_converter([65, 110, 100, 114, 101, 119, 32, 66, 117, 114, 103, 111, 115], 'to_char'))  
+
+
+def ASCII_to_binary_converter(integer, mode):
+    if mode == 'to_ASCII':
+        ASCII_list = []
+        for number in integer:
+            ASCII_list.append(int(number, 2))
+
+        return ASCII_list
+    
+    elif mode == 'to_binary':
+        binary_list = []
+        for number in integer:
+            binary_list.append(bin(number)[2:])
+        return binary_list
+    
+print(ASCII_to_binary_converter(['1000001', '1101110', '1100100', '1110010', '1100101', '1110111', '100000', '1000010', '1110101', '1110010', '1100111', '1101111', '1110011'], 'to_ASCII'))
+print(ASCII_to_binary_converter([65, 110, 100, 114, 101, 119, 32, 66, 117, 114, 103, 111, 115], 'to_binary'))
