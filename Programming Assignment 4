@@ -1,0 +1,78 @@
+
+def is_prime(number):
+    for i in range(2, number):
+        if number % i == 0:
+            return False
+    return True
+
+def prime_list():
+    primes = []
+    for num in range(100, 1001):
+        if is_prime(num):
+            primes.append(num)
+    return primes
+
+import random
+primes = prime_list()
+p, q = random.sample(primes, 2)
+
+n = p * q
+phi = (p - 1) * (q - 1)
+
+
+import math
+e = 3
+while math.gcd(e, phi) != 1:
+    e += 2  
+
+d = None
+for i in range(1, phi):
+    if (i * e) % phi == 1:
+        d = i
+        break
+
+
+def RSA(m, key):
+    exponent, n = key
+    return pow(m, exponent, n)
+
+
+def string_to_ascii_list(text):
+    return [ord(char) for char in text]
+
+def ascii_list_to_string(ascii_list):
+    return ''.join([chr(num) for num in ascii_list])
+
+def encrypt_message(text, pub_key):
+    ascii_list = string_to_ascii_list(text)
+    encrypted = [RSA(num, pub_key) for num in ascii_list]
+    return encrypted
+
+def decrypt_message(cipher_list, priv_key):
+    decrypted_ascii = [RSA(num, priv_key) for num in cipher_list]
+    return ascii_list_to_string(decrypted_ascii)
+
+
+public_key = (e, n)
+private_key = (d, n)
+
+name = "Andrew Burgos"
+sentence = "RSA is pretty cool!"
+
+encrypted_name = encrypt_message(name, public_key)
+decrypted_name = decrypt_message(encrypted_name, private_key)
+
+encrypted_sentence = encrypt_message(sentence, public_key)
+decrypted_sentence = decrypt_message(encrypted_sentence, private_key)
+
+print("Chosen primes:", p, "and", q)
+print("Public key:", public_key)
+print("Private key:", private_key)
+
+print("\nOriginal name:", name)
+print("Encrypted:", encrypted_name)
+print("Decrypted:", decrypted_name)
+
+print("\nOriginal sentence:", sentence)
+print("Encrypted:", encrypted_sentence)
+print("Decrypted:", decrypted_sentence)
